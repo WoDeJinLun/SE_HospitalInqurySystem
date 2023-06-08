@@ -10,6 +10,8 @@ import Profile from '../pages/Profile/Profile'
 import Login from '../pages/Login/Login'
 import Register from '../pages/Register/Register'
 import Feedback from '../pages/Feedback/Feedback'
+import PersonalCenter from '../pages/PersonalCenter/PersonalCenter'
+import AnotherProfile from '../pages/AnotherProfile/AnotherProfile'
 // 声明使用插件
 Vue.use(VueRouter)
 
@@ -52,6 +54,14 @@ export default new VueRouter({
     {
       path:'/feedback',
       component:Feedback
+    },
+    {
+      path:'/personal_center',
+      component:PersonalCenter
+    },
+    {
+      path:'/another_profile',
+      component: AnotherProfile
     }
   ]
 })
