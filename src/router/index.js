@@ -56,6 +56,11 @@ export default new VueRouter({
       component:Feedback
     },
     {
+      path:'/leftuptest',
+      component:Feedback
+      
+    },
+    {
       path:'/personal_center',
       component:PersonalCenter
     },
