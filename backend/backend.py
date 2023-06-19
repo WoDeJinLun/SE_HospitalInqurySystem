@@ -1,12 +1,12 @@
 from flask import Flask, request, jsonify
 from flask_cors import CORS
 from mysql_interface import MysqlInterface
-
+from use import AiQuery
 app = Flask(__name__)
 CORS(app)
 
 mysql_interface = MysqlInterface()
-
+ai_interface = AiQuery()
 @app.route('/patients', methods=['POST'])
 def create_patient():
     data = request.json
@@ -57,6 +57,11 @@ def delete_patient(id):
     mysql_interface.delete_patient(id)
 
     return jsonify({"message": "Patient record deleted successfully"})
+
+@app.route('/patients/<str:sentence>',method =['GET'])
+def GetAiPrompt(sentence):
+    prompt = ai_interface.query(sentence)
+    return jsonify({"message":"{}".format(sentence)})
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0',port=5000,debug=True)
