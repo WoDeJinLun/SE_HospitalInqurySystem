@@ -12,6 +12,9 @@ import Register from '../pages/Register/Register'
 import Feedback from '../pages/Feedback/Feedback'
 import PersonalCenter from '../pages/PersonalCenter/PersonalCenter'
 import AnotherProfile from '../pages/AnotherProfile/AnotherProfile'
+import Chat from '../pages/Chat/Chat.vue'
+import CaseRecord from '../pages/CaseRecord/CaseRecord.vue'
+import Bill from '../pages/Bill/Bill.vue'
 // 声明使用插件
 Vue.use(VueRouter)
 
@@ -67,6 +70,21 @@ export default new VueRouter({
     {
       path:'/another_profile',
       component: AnotherProfile
+    },
+    {
+      path: '/chat',
+      name: 'chat',
+      component: Chat
+    },
+    {
+      path: '/CaseRecord',
+      name: 'CaseRecord',
+      component: CaseRecord
+    },
+    {
+      path: '/Bill',
+      name: 'Bill',
+      component: Bill
     }
   ]
 })

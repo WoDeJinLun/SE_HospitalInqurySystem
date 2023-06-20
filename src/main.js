@@ -9,6 +9,7 @@ import router from './router'
 import ElementUI from 'element-ui'
 import 'element-ui/lib/theme-chalk/index.css'
 Vue.component(Button.name, Button)
+Vue.use(ElementUI)
 
 // eslint-disable-next-line no-new
 new Vue({
