@@ -4,11 +4,11 @@
     <!--首页头部-->
     <HeaderTop title="首页">
       <span class="header_login" slot="right">
-        <span class="header_login_text">登录 | 注册</span>
+        <span class="header_login_text" @click="goTo('/login')">登录 | 注册</span>
       </span>
     </HeaderTop>
     <!--首页导航-->
-    <nav class="home_nav" style="background-color: #d8f3ee;">
+    <nav class="home_nav" style="background-color: #d8f3ee;" @click="goTo('/chat')">
       <div class="nav_list">
         <a href="javascript:" class="link_to_question">
           <div class="nav_container">
@@ -16,28 +16,28 @@
           </div>
           <span>问诊</span>
         </a>
-        <a href="javascript:" class="link_to_question">
+        <a href="javascript:" class="link_to_question" @click="goTo('/register')">
           <div class="nav_container">
             <i class="iconfont icon-jiancha" style="color: #28B8A1;"></i>
           </div>
-          <span>检查</span>
+          <span>挂号</span>
         </a>
-        <a href="javascript:" class="link_to_question">
+        <a href="javascript:" class="link_to_question" @click="goTo('/bill')">
           <div class="nav_container">
             <i class="iconfont icon-yishengzhenduan" style="color: #28B8A1;"></i>
           </div>
-          <span>医生诊断</span>
+          <span>收据</span>
         </a>
-        <a href="javascript:" class="link_to_question">
+        <a href="javascript:" class="link_to_question" @click="goTo('/CaseRecord')">
           <div class="nav_container">
             <i class="iconfont icon-hulizhenduan" style="color: #28B8A1;"></i>
           </div>
-          <span>护理诊断</span>
+          <span>病历</span>
         </a>
       </div>
       <div class="nav_btn">
-        <mt-button type="primary" size="normal" class="mt_btn" style="background-color: #28B8A1;">查疾病</mt-button>
-        <mt-button type="primary" size="normal" class="mt_btn" style="background-color: #28B8A1;">辅助常识</mt-button>
+        <mt-button type="primary" size="normal" class="mt_btn" style="background-color: #28B8A1;" @click="goTo('/chat')">查疾病</mt-button>
+        <mt-button type="primary" size="normal" class="mt_btn" style="background-color: #28B8A1;" @click="goTo('\leftuptest')">就诊反馈</mt-button>
       </div>
     </nav>
     <!--首页内容-->
@@ -58,6 +58,11 @@ export default {
   components: {
     HeaderTop,
     NursingKnowledgeList
+  },
+  methods:{
+    goTo (path) {
+      this.$router.push(path)
+    }
   }
 }
 </script>

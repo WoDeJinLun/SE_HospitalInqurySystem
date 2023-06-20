@@ -7,7 +7,7 @@ class MysqlInterface:
             password="Zx20020720",  # 密码
             database="hospital_info"  # 数据库名称
         )
-
+        
         # 创建游标对象
         self.cursor = self.conn.cursor()
 
@@ -73,6 +73,21 @@ class MysqlInterface:
         self.cursor.execute(sql, (id,))
         self.conn.commit()
         print("医生记录删除成功，ID = {}".format(id))
+    def create_drug_receipt(self, patient_id: int, patient_name: str, drug_name: str, unit_price: float, quantity: int):
+        sql = '''INSERT INTO DrugReceipt (PatientID, PatientName, DrugName, UnitPrice, Quantity)
+                VALUES (%s, %s, %s, %s, %s)'''
+        values = (patient_id, patient_name, drug_name, unit_price, quantity)
+        self.cursor.execute(sql, values)
+        self.conn.commit()
+        print("药品收据创建成功")
+    def create_medical_record(self, patient_id: int, patient_name: str, gender: str, age: int, diagnosis: str, treatment_plan: str):
+        sql = '''INSERT INTO MedicalRecord (PatientID, PatientName, Gender, Age, Diagnosis, TreatmentPlan)
+                VALUES (%s, %s, %s, %s, %s, %s)'''
+        values = (patient_id, patient_name, gender, age, diagnosis, treatment_plan)
+        self.cursor.execute(sql, values)
+        self.conn.commit()
+        print("病历录入成功")
+
 
 
 # # 使用示例

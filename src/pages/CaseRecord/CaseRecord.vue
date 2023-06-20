@@ -32,6 +32,8 @@
 </template>
 
 <script>
+
+import axios from 'axios';
 export default {
   data() {
     return {
@@ -46,13 +48,27 @@ export default {
     sendRecord() {
       this.$message.success("保存成功");
       // TODO: 发送病历信息
-      console.log({
-        patientName: this.patientName,
+      const requestData = {
+        patient_id: this.patient_id,
+        patient_name: this.patientName,
         gender: this.gender,
         age: this.age,
         diagnosis: this.diagnosis,
-        treatment: this.treatment,
-      });
+        treatment_plan: this.treatment,
+      };
+      console.log(requestData);
+
+      // 发送POST请求
+      axios
+        .post('localhost:8080/medical_records', requestData)
+        .then(response => {
+          console.log(response.data);
+          // 处理成功响应
+        })
+        .catch(error => {
+          console.error(error);
+          // 处理错误响应
+        });
     },
     goBack() {
       this.$router.push("/chat");

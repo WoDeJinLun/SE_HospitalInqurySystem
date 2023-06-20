@@ -18,7 +18,7 @@ class AiQuery:
         #print(word_freq)
         with open('label_dict.json',encoding='utf8') as f3:
             self.label_dict = json.load(f3)
-        self.label_dict_index = [0,] * (len(label_dict)+1)
+        self.label_dict_index = [0,] * (len(self.label_dict)+1)
         for i in self.label_dict.items():
             self.label_dict_index[i[1]] = i[0]
     def query(self,sentence:str):
