@@ -5,7 +5,7 @@
         <div>
           <span>个人中心</span>
         </div>
-        <el-button type="info" @click="logout">
+        <el-button type="info" @click="goTo('/')">
           退出
         </el-button>
       </el-header>
@@ -23,11 +23,11 @@
               <!-- 一级菜单模板 -->
   
               <template #title>
-                <i class="el-icon-user"></i>
-                <span>register</span>
+                <i class="el-icon-phone"></i>
+                <span>挂号</span>
               </template>
-              <el-menu-item index="0-1">I want register</el-menu-item>
-              <el-menu-item index="0-2">Registration history</el-menu-item>
+              <el-menu-item index="0-1">我要挂号</el-menu-item>
+              <el-menu-item index="0-2">挂号历史</el-menu-item>
             </el-submenu>
             <el-submenu index="1">
               <!-- 一级菜单模板 -->
@@ -46,14 +46,6 @@
               <el-menu-item index="2-1">就诊反馈</el-menu-item>
             </el-submenu>
 
-            <el-submenu index="3">
-              <!-- 一级菜单模板 -->
-              <template #title>
-                <i class="el-icon-warning-outline"></i>
-                <span>关于我们</span>
-              </template>
-              <el-menu-item index="3-1">版本信息</el-menu-item>
-            </el-submenu>
           </el-menu>
         </el-aside>
         <el-main>
@@ -68,28 +60,26 @@
               <!-- Registration Form -->
               <template v-if="selectedSubMenu === '0-1'">
                 <el-row>
+
                   <el-col :span="24">
-                    <el-form-item label="Department" prop="department">
-                      <el-select
-                        v-model="form.department"
-                        placeholder="Please select department"
-                      >
-                        <el-option
-                          v-for="department in departments"
-                          :key="department.value"
-                          :label="department.label"
-                          :value="department.value"
-                        ></el-option>
-                      </el-select>
+                  <div class="block">
+                    <el-form-item label="挂号科室" prop="挂号科室">
+                    <el-cascader
+                      v-model="value"
+                      :options="departments"
+                      @change="ResetTimeDoctor()">
+                    </el-cascader>
                     </el-form-item>
-                  </el-col>
-                </el-row>
+                  </div>     
+                </el-col>  
+                </el-row>      
                 <el-row>
                   <el-col :span="24">
-                    <el-form-item label="Timeslot" prop="timeslot">
+                    <el-form-item label="挂号时段" prop="挂号时段">
                       <el-select
                         v-model="form.timeslot"
-                        placeholder="Please select timeslot"
+                        placeholder="请选择"
+                        @change="ResetDoctor()"
                       >
                         <el-option
                           v-for="timeslot in timeslots"
@@ -103,13 +93,13 @@
                 </el-row>
                 <el-row>
                   <el-col :span="24">
-                    <el-form-item label="Doctor" prop="doctor">
+                    <el-form-item label="医生" prop="医生">
                       <el-select
                         v-model="form.doctor"
-                        placeholder="Please select doctor"
+                        placeholder="请选择"
                       >
                         <el-option
-                          v-for="doctor in doctors"
+                          v-for="doctor in random_doctors"
                           :key="doctor.value"
                           :label="doctor.label"
                           :value="doctor.value"
@@ -120,11 +110,11 @@
                 </el-row>
                 <el-row>
                   <el-col :span="24">
-                    <el-form-item label="Description" prop="description">
+                    <el-form-item label="病情描述" prop="description">
                       <el-input
                         type="textarea"
                         :rows="4"
-                        placeholder="Please enter description"
+                        placeholder="请输入病情描述"
                         v-model="form.description"
                       ></el-input>
                     </el-form-item>
@@ -132,11 +122,11 @@
                 </el-row>
                 <el-row>
                   <el-col :span="24">
-                    <el-form-item label="Additional Requirements" prop="requirements">
+                    <el-form-item label="特殊要求" prop="requirements">
                       <el-input
                         type="textarea"
                         :rows="4"
-                        placeholder="Please enter additional requirements"
+                        placeholder="（选填）请输入问诊的特殊要求"
                         v-model="form.requirements"
                       ></el-input>
                     </el-form-item>
@@ -145,7 +135,7 @@
                 <el-row>
                   <el-col :span="24">
                     <el-form-item>
-                      <el-button type="primary" @click="submitForm">Submit</el-button>
+                      <el-button type="primary" @click="submitFor">提交</el-button>
                     </el-form-item>
                   </el-col>
                 </el-row>
@@ -173,7 +163,7 @@
                       <el-button
                         v-if="scope.row.status === 'Pending'"
                         type="danger"
-                        @click="cancelRegistration(scope.row.registrationId)"
+                        @click="cancelRegistration(scope.row)"
                       >
                         Cancel
                       </el-button>
@@ -260,22 +250,22 @@
             <el-row>
               <el-col span="24">
                 <el-form-item label="过敏原信息" prop="allege">
-                  <el-input v-model="form.name"  placeholder="可填写以便问诊医生参考"></el-input>
+                  <el-input v-model="form.allege"  placeholder="可填写以便问诊医生参考"></el-input>
                 </el-form-item>
               </el-col>
             </el-row>
 
-            <el-form-item label="遗传病史" prop="history">
-                  <el-input v-model="form.name" placeholder="可填写以便问诊医生参考"></el-input>
+            <el-form-item label="遗传病史" prop="historya">
+                  <el-input v-model="form.historya" placeholder="可填写以便问诊医生参考"></el-input>
               </el-form-item>
               
-              <el-form-item label="重大病史" prop="history">
-                  <el-input v-model="form.name" placeholder="可填写以便问诊医生参考"></el-input>
+              <el-form-item label="重大病史" prop="historyb">
+                  <el-input v-model="form.historyb" placeholder="可填写以便问诊医生参考"></el-input>
               </el-form-item>
             
               <!-- Add more form items for other personal information -->
             </el-form>
-            <el-button v-show="showForm" type="success" @click="submitForm">提交啊啊</el-button>
+            <el-button v-show="showForm" type="success" >提交</el-button>
             <div v-if="submitSuccess" class="success-message">提交成功</div>
           </div>
         </el-main>
@@ -289,10 +279,13 @@ export default {
   name: 'PersonalCenter',
   data() {
     return {
+      registrationHistory:[],
+      RegistID:0,
       showForm: false, // Flag to control form visibility
       showFormReg: false,
       showFeedback: false,
       showFormRegTable: false,
+      selectedSubMenu: '',
       form: {
         name: '',
         email: '',
@@ -305,22 +298,181 @@ export default {
         requirements:'',
         // Add more properties for other personal information
       },
-      departments: [
-      { value: '1', label: 'Department 1' },
-      { value: '2', label: 'Department 2' },
-      { value: '3', label: 'Department 3' },
-      // Add more departments as needed
-    ],
+      departments: [{
+            value: 'duoxueke',
+            label: '多学科联合诊治',
+            children: [{
+              value: 'duoxuekejiefanglu',
+              label: '多学科联合诊治-解放路',
+            }]
+          }, {
+            value: 'quanke',
+            label: '全科医学科',
+            children: [{
+              value: 'quankejiefanglu',
+              label: '全科医学科门诊-解放路',
+            }]
+          },
+          {
+            value: 'neike',
+            label: '内科',
+            children: [{
+              value: 'neifenmi',
+              label: '内分泌科',
+            }, {
+              value: 'xinxueguan',
+              label: '心血管科',
+              
+            }, {
+              value: 'shenjing',
+              label: '神经内科',
+            }, {
+              value: 'xueye',
+              label: '血液内科',
+              
+            }, {
+              value: 'huxi',
+              label: '呼吸内科',
+              
+            }, {
+              value: 'xiaohua',
+              label: '消化内科',
+            }, {
+              value: 'yichuan',
+              label: '医学遗传科',
+            }, {
+              value: 'fengshi',
+              label: '风湿免疫科',
+            }, {
+              value: 'guomin',
+              label: '过敏科（变态反应科）',
+            }, {
+              value: 'shenzang',
+              label: '肾脏内科',
+            }, {
+              value: 'jingshen',
+              label: '精神科',
+            }, {
+              value: 'ganran',
+              label: '感染性疾病科',
+            }]
+          }, {
+            value: 'waike',
+            label: '外科',
+            children: [{
+              value: 'ruxian',
+              label: '乳腺外科'
+            }, {
+              value: 'zhengxing',
+              label: '整形科'
+            }, {
+              value: 'gandanyi',
+              label: '肝胆胰外科'
+            }, {
+              value: 'xueguan',
+              label: '血管外科'
+            }, {
+              value: 'dachang',
+              label: '大肠外科'
+            }, {
+              value: 'puwai',
+              label: '普外科'
+            }, {
+              value: 'jiazhuangxian',
+              label: '甲状腺外科'
+            }, {
+              value: 'weichang',
+              label: '胃肠外科'
+            }, {
+              value: 'gu',
+              label: '骨科'
+            }, {
+              value: 'miniao',
+              label: '泌尿外科'
+            }, {
+              value: 'shenjingwai',
+              label: '神经外科'
+            }, {
+              value: 'xiongwai',
+              label: '胸外科'
+            }]
+          }, {
+            value: 'fuchanke',
+            label: '妇产科'
+          }, {
+            value: 'erke',
+            label: '儿科'
+          }],
     timeslots: [
-      { value: '1', label: 'Morning' },
-      { value: '2', label: 'Afternoon' },
-      { value: '3', label: 'Evening' },
+      { value: '1', label: '8:00-8:30' },
+      { value: '2', label: '8:30-9:00' },
+      { value: '3', label: '9:00-9:30' },
+      { value: '4', label: '9:30-10:00' },
+      { value: '5', label: '10:00-10:30' },
+      { value: '6', label: '10:30-11:00' },
+      { value: '7', label: '11:00-11:30' },
+      { value: '8', label: '14:00-14:30' },
+      { value: '9', label: '14:30-15:00' },
+      { value: '10', label: '15:00-15:30' },
+      { value: '11', label: '15:30-16:00' },
+      { value: '12', label: '16:00-16:30' },
+      { value: '13', label: '16:30-17:00' },  
       // Add more timeslots as needed
     ],
+    random_doctors:[
+
+    ],
     doctors: [
-      { value: '1', label: 'Doctor 1' },
-      { value: '2', label: 'Doctor 2' },
-      { value: '3', label: 'Doctor 3' },
+      { value: 1, label: '医生 1' },
+      { value: 2, label: '医生 2' },
+      { value: 3, label: '医生 3' },
+      { value: 4, label: '医生 4' },
+      { value: 5, label: '医生 5' },
+      { value: 6, label: '医生 6' },
+      { value: 7, label: '医生 7' },
+      { value: 8, label: '医生 8' },
+      { value: 9, label: '医生 9' },
+      { value: 10, label: '医生 10' },
+      { value: 11, label: '医生 11' },
+      { value: 12, label: '医生 12' },
+      { value: 13, label: '医生 13' },
+      { value: 14, label: '医生 14' },
+      { value: 15, label: '医生 15' },
+      { value: 16, label: '医生 16' },
+      { value: 17, label: '医生 17' },
+      { value: 18, label: '医生 18' },
+      { value: 19, label: '医生 19' },
+      { value: 20, label: '医生 20' },
+      { value: 21, label: '医生 21' },
+      { value: 22, label: '医生 22' },
+      { value: 23, label: '医生 23' },
+      { value: 24, label: '医生 24' },
+      { value: 25, label: '医生 25' },
+      { value: 26, label: '医生 26' },
+      { value: 27, label: '医生 27' },
+      { value: 28, label: '医生 28' },
+      { value: 29, label: '医生 29' },
+      { value: 30, label: '医生 30' },
+      { value: 31, label: '医生 31' },
+      { value: 32, label: '医生 32' },
+      { value: 33, label: '医生 33' },
+      { value: 34, label: '医生 34' },
+      { value: 35, label: '医生 35' },
+      { value: 36, label: '医生 36' },
+      { value: 37, label: '医生 37' },
+      { value: 38, label: '医生 38' },
+      { value: 39, label: '医生 39' },
+      { value: 40, label: '医生 40' },
+      { value: 41, label: '医生 41' },
+      { value: 42, label: '医生 42' },
+      { value: 43, label: '医生 43' },
+      { value: 44, label: '医生 44' },
+      { value: 45, label: '医生 45' },
+      { value: 46, label: '医生 46' },
+      { value: 47, label: '医生 47' },
+      { value: 48, label: '医生 48' },
+      { value: 49, label: '医生 49' },
+      { value: 50, label: '医生 50' },
       // Add more doctors as needed
     ],
       rules: {
@@ -335,6 +487,55 @@ export default {
     };
   },
   methods: {
+    goTo (path) {
+      this.$router.push(path)
+    },
+    getDepartmentLabel(value) {
+      const department = this.departments.find((dept) => dept.value === value);
+      return department ? department.label : '';
+    },
+    getTimeslotLabel(value) {
+      const timeslot = this.timeslots.find((slot) => slot.value === value);
+      return timeslot ? timeslot.label : '';
+    },
+    getDoctorLabel(value) {
+      const doctor = this.random_doctors.find((doc) => doc.value === value);
+      return doctor ? doctor.label : '';
+    },
+    submitFor() {
+      const departmentLabel = this.getDepartmentLabel(this.value[0]);
+      const timeslotLabel = this.getTimeslotLabel(this.form.timeslot);
+      const doctorLabel = this.getDoctorLabel(this.form.doctor);
+
+      const registration = {
+        registrationId: 2, // Generate a unique registration ID
+        department: departmentLabel,
+        timeslot: timeslotLabel,
+        doctor: doctorLabel,
+        status: 'Pending',
+      };
+
+      this.$message.success('保存成功');
+      this.registrationHistory.push(registration);
+    },
+    genRegID()
+    {
+        this.RegistID += 1;
+        return this.RegistID;
+    },
+    ResetTimeDoctor(){
+      this.form.timeslot=null;
+      this.form.doctor=null;
+      this.random_doctors=[]
+    },
+    ResetDoctor(){
+      this.form.doctor=null;
+      this.random_doctors = this.getRandomDoctors(5).sort();
+    },
+    getRandomDoctors(count) {
+    const shuffled = this.doctors.sort(() => 0.5 - Math.random());
+    return shuffled.slice(0, count).sort();
+    },
     logout() {
       // Handle logout logic here
     },
@@ -361,6 +562,13 @@ export default {
           console.log('form incorrect!')
         }
       });
+    },
+    cancelRegistration(row) {
+      const index = this.registrationHistory.indexOf(row);
+      if (index > -1) {
+        this.registrationHistory.splice(index, 1);
+        this.$message.success('Registration canceled');
+      }
     },
 
     handleMenuSelect(index) {

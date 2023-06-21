@@ -113,22 +113,15 @@
         </div>
       </div>
       <div class="quick-messages">
-          <el-button type="text" width=12 @click="sendQuickMessage('患者您好！')">患者您好！</el-button>
-          <el-button type="text" @click="sendQuickMessage('请问我有什么可以帮到您？')">请问我有什么可以帮到您？</el-button>
-        </div>
-        <div class="quick-messages">
-          <el-button type="text" @click="sendQuickMessage('请讲一下自己的病情')">请讲一下自己的病情</el-button>
-          <el-button type="text" @click="sendQuickMessage('这种症状出现多久了？')">这种症状出现多久了？</el-button>
-  
-          <!-- Add more quick message buttons as needed -->
-        </div>
-        <div class="quick-messages">
-          <el-button type="text" @click="sendQuickMessage('建议来医院检查')">建议来医院检查。</el-button>
-          <el-button type="text" @click="sendQuickMessage('祝您身体健康，再见')">祝您身体健康，再见</el-button>
-  
-          <!-- Add more quick message buttons as needed -->
-        </div>   
+        <el-button type="text" width=12 @click="sendQuickMessage('医生您好！')">医生您好！</el-button>
+        <el-button type="text" @click="sendQuickMessage('这个检查该如何做？')">这个检查该如何做？</el-button>
+      </div>
+      <div class="quick-messages">
+        <el-button type="text" @click="sendQuickMessage('我讲一下自己的病情')">我讲一下自己的病情</el-button>
+        <el-button type="text" @click="sendQuickMessage('好的，谢谢医生')">好的，谢谢医生</el-button>
 
+        <!-- Add more quick message buttons as needed -->
+      </div>
  
     </div>
   </div>

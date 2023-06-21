@@ -36,7 +36,7 @@ export default new VueRouter({
       }
     },
     {
-      path: '/profile',
+      path: '/aprofile',
       component: Profile,
       meta: {
         showFooter: true
@@ -54,26 +54,28 @@ export default new VueRouter({
       path:'/register',
       component: Register
     },
-    {
-      path:'/feedback',
-      component:Feedback
-    },
+  
     {
       path:'/leftuptest',
       component:Feedback
       
     },
     {
-      path:'/personal_center',
+      path:'/PersonalCenter',
       component:PersonalCenter
     },
+
     {
-      path:'/another_profile',
-      component: AnotherProfile
+      path:'/profile',
+      component: PersonalCenter
     },
     {
       path: '/chat',
       name: 'chat',
+      component: Chat
+    },
+    {
+      path: '/chatdoctor',
       component: Chat
     },
     {
