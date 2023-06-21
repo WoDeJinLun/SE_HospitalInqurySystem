@@ -3,7 +3,7 @@ from flask_cors import CORS
 from mysql_interface import MysqlInterface
 from use import AiQuery
 app = Flask(__name__)
-cors = CORS(app)
+cors = CORS(app,supports_credentials=True)
 # CORS(app, resources=r'/*', supports_credentials=True)
 mysql_interface = MysqlInterface()
 ai_interface = AiQuery()
@@ -58,10 +58,10 @@ def delete_patient(id):
 
     return jsonify({"message": "Patient record deleted successfully"})
 
-@app.route('/ai',methods =['GET'])
+@app.route('/ai/',methods =['get'])
 def GetAiPrompt():
-    data = request.json
-    sentence = data['message']
+    sentence = request.values.get('message')
+    
     prompt = ai_interface.query(sentence)
     return jsonify({"message":"{}".format(prompt)})
 

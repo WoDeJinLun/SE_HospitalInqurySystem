@@ -8,8 +8,8 @@ import json
 from functools import cmp_to_key 
 class AiQuery:
     def __init__(self) -> None:     
-        Pxy = pd.read_csv('./pxy.csv')
-        #print(Pxy)
+        self.Pxy = pd.read_csv('./pxy.csv')
+        #print(self.Pxy)
         with open('word_dict.json', encoding='utf8') as f1:
             self.word_dict = json.load(f1)
         #print(word_dict)
@@ -24,7 +24,7 @@ class AiQuery:
     def query(self,sentence:str):
         row = list(pd.Series(jb.lcut(sentence, cut_all=True)).unique())
         prob = np.zeros(shape=(len(self.label_dict),))
-        Pxy = np.array(Pxy)
+        self.Pxy = np.array(self.Pxy)
 
         tot_info = 0
         got = [False,] * (len(self.word_dict) + 1)
@@ -34,7 +34,7 @@ class AiQuery:
                 got[self.word_dict[i]] = True 
                 
                 for j in range(len(self.label_dict)):
-                    prob[j] += Pxy[self.word_dict[i]][j]
+                    prob[j] += self.Pxy[self.word_dict[i]][j]
 
         heap = []
         for j in range(3):

@@ -59,16 +59,17 @@ export default {
       console.log(requestData);
 
       // 发送POST请求
-      axios
-        .post('localhost:8080/medical_records', requestData)
-        .then(response => {
-          console.log(response.data);
-          // 处理成功响应
-        })
-        .catch(error => {
-          console.error(error);
-          // 处理错误响应
-        });
+      axios.post("http://127.0.0.1:5000/medical_records",requestData)
+      // axios
+      //   .post('localhost:8080/medical_records', requestData)
+      //   .then(response => {
+      //     console.log(response.data);
+      //     // 处理成功响应
+      //   })
+      //   .catch(error => {
+      //     console.error(error);
+      //     // 处理错误响应
+      //   });
     },
     goBack() {
       this.$router.push("/chat");

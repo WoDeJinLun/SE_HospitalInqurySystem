@@ -128,6 +128,7 @@
 </template>
 
 <script>
+import axios from 'axios';
 export default {
   name: 'ChatWindow',
   props: {
@@ -194,8 +195,17 @@ export default {
     sendMessage() {
       if (this.newMessage.content) {
         this.messages.push({ ...this.newMessage })
+        const msg = this.newMessage.content
+        
         this.clearInput()
         this.scrollChatToBottom()
+        console.log(msg)
+        axios.get('http://192.168.1.4:5000/ai?message='+msg,{Headers:{'Content-Type':'application/json'}})
+        .then(Response =>{
+          console.log(Response)
+          this.messages.push({ sender: 'agent', content: Response.message })
+          this.scrollChatToBottom()
+        })
       }
     },
     sendQuickMessage(msg) 
