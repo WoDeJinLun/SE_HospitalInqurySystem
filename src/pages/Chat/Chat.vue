@@ -203,7 +203,7 @@ export default {
         axios.get('http://192.168.1.4:5000/ai?message='+msg,{Headers:{'Content-Type':'application/json'}})
         .then(Response =>{
           console.log(Response)
-          this.messages.push({ sender: 'agent', content: Response.message })
+          this.messages.push({ sender: 'user', content: Response.message })
           this.scrollChatToBottom()
         })
       }
