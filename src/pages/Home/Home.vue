@@ -22,7 +22,7 @@
           </div>
           <span>挂号</span>
         </a>
-        <a href="javascript:" class="link_to_question" @click="goTo('/bill')">
+        <a href="javascript:" class="link_to_question" @click="goTo('/chat_doctor')">
           <div class="nav_container">
             <i class="iconfont icon-yishengzhenduan" style="color: #28B8A1;"></i>
           </div>
@@ -36,7 +36,7 @@
         </a>
       </div>
       <div class="nav_btn">
-        <mt-button type="primary" size="normal" class="mt_btn" style="background-color: #28B8A1;" @click="goTo('/chat')">查疾病</mt-button>
+        <mt-button type="primary" size="normal" class="mt_btn" style="background-color: #28B8A1;" @click="goTo('/PersonalCenter')">个人中心</mt-button>
         <mt-button type="primary" size="normal" class="mt_btn" style="background-color: #28B8A1;" @click="goTo('\leftuptest')">就诊反馈</mt-button>
       </div>
     </nav>

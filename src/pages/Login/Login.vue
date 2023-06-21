@@ -25,7 +25,7 @@
               </section>
             </section>
           </div>
-          <button class="login_submit">登录</button>
+          <button class="login_submit" @click="goTo('/')">登录</button>
         </form>
         <a href="javascript:;" class="about_us">关于我们</a>
       </div>
@@ -41,7 +41,9 @@
 <script>
 import AlertTip from '../../components/AlertTip/AlertTip'
 export default {
+
   data () {
+
     return {
       showPwd: false, // 是否显示密码
       studentID: '', // 学号
@@ -55,6 +57,9 @@ export default {
     showAlert (alertText) {
       this.alertShow = true
       this.alertText = alertText
+    },
+    goTo (path) {
+      this.$router.push(path)
     },
     // 异步登录
     login () {
