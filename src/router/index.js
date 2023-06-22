@@ -15,6 +15,8 @@ import AnotherProfile from '../pages/AnotherProfile/AnotherProfile'
 import Chat from '../pages/Chat/Chat.vue'
 import CaseRecord from '../pages/CaseRecord/CaseRecord.vue'
 import Bill from '../pages/Bill/Bill.vue'
+import SelectChat from "../pages/SelectChat/SelectChat.vue"
+import docterchat from "../pages/doctorchat/doctorchat.vue"
 // 声明使用插件
 Vue.use(VueRouter)
 
@@ -87,6 +89,16 @@ export default new VueRouter({
       path: '/Bill',
       name: 'Bill',
       component: Bill
+    },
+    {
+      path: '/SelectChat',
+      name: 'SelectChat',
+      component: SelectChat
+    },
+    {
+      path: '/doctorchat',
+      name:'doctorchat',
+      component: docterchat
     }
   ]
 })

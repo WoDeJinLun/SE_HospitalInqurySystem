@@ -8,7 +8,7 @@
       </span>
     </HeaderTop>
     <!--首页导航-->
-    <nav class="home_nav" style="background-color: #d8f3ee;" @click="goTo('/chat')">
+    <nav class="home_nav" style="background-color: #d8f3ee;" @click="goTo('/SelectChat')">
       <div class="nav_list">
         <a href="javascript:" class="link_to_question">
           <div class="nav_container">
