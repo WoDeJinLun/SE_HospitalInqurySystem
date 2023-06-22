@@ -201,17 +201,27 @@ export default {
     },
     sendMessage() {
       if (this.newMessage.content) {
+        // this.messages.push({...this.newMessage})
+        // console.log(this.newMessage)
+        // console.log({...this.newMessage})
         this.messages.push({ ...this.newMessage })
         const msg = this.newMessage.content
         
         this.clearInput()
         this.scrollChatToBottom()
         console.log(msg)
-        axios.get('http://192.168.1.4:5000/ai?message='+msg,{Headers:{'Content-Type':'application/json'}})
+        axios.get('http://localhost:5000/ai?message='+msg,{Headers:{'Content-Type':'application/json'}})
         .then(Response =>{
           console.log(Response)
-          this.messages.push({ sender: 'user', content: Response.message })
+          // this.messages.push({...Response.data})
+          this.newMessage.sender = "agent"
+          this.newMessage.content = Response.data.message
+          
+          console.log({...this.newMessage})
+          this.messages.push({...this.newMessage})
+          this.clearInput()
           this.scrollChatToBottom()
+          this.newMessage.sender = "user"
         })
       }
     },
