@@ -120,13 +120,13 @@
           <el-button type="text" @click="sendQuickMessage('请讲一下自己的病情')">请讲一下自己的病情</el-button>
           <el-button type="text" @click="sendQuickMessage('这种症状出现多久了？')">这种症状出现多久了？</el-button>
   
-          <!-- Add more quick message buttons as needed -->
+       
         </div>
         <div class="quick-messages">
           <el-button type="text" @click="sendQuickMessage('建议来医院检查')">建议来医院检查。</el-button>
           <el-button type="text" @click="sendQuickMessage('祝您身体健康，再见')">祝您身体健康，再见</el-button>
   
-          <!-- Add more quick message buttons as needed -->
+ 
         </div>   
 
  
@@ -136,7 +136,23 @@
 
 <script>
 import axios from 'axios';
+import io from 'socket.io-client';
+
+
 export default {
+  created() {
+      // 创建 Socket.io 客户端连接
+      const socket = io('http://127.0.0.1:3000');
+
+
+      
+      // 监听服务器发送的消息事件
+      socket.on('receiveMessage', (message) => {
+        this.messages.push(message);
+        this.scrollChatToBottom();
+      });
+    },
+
   name: 'ChatWindow',
   props: {
     title: {
@@ -145,6 +161,7 @@ export default {
     }
   },
   data() {
+    //this.created();
     return {
       gender: "男",
       age: "",
@@ -199,6 +216,7 @@ export default {
         treatment: this.treatment,
       });
     },
+
     sendMessage() {
       if (this.newMessage.content) {
         // this.messages.push({...this.newMessage})
@@ -223,15 +241,47 @@ export default {
           this.scrollChatToBottom()
           this.newMessage.sender = "user"
         })
+ 
       }
     },
     sendQuickMessage(msg) 
     {
       if (msg) {
-        this.messages.push({ sender: 'user', content: msg });
+        const message = { sender: 'user', content: msg };
         this.scrollChatToBottom();
+
+        axios.post('http://127.0.0.1:3000/msg', JSON.stringify(message),{
+          headers: {'Content-Type' : 'application/json'}
+        })
+          .then(response => {
+            // Handle the response from the server
+            const receivedMessage = response.data;
+            console.log(receivedMessage);
+            console.log(receivedMessage.sender);
+            console.log(receivedMessage.content);
+            this.messages.push(message);
+            this.scrollChatToBottom();
+          })
+          .catch(error => {
+            console.error('Error sending message:', error);
+          })
+          .finally(() => {
+            this.newMessage.content = ''; // 清空输入框中的文字
+          });
       }
     },
+    receiveMessage(){
+      this.socket.on('receiveMessage', ({ senderr, message }) => {
+      // 处理接收到的消息
+      const receivedMessage = {
+        sender: senderr,
+        content: message
+      };
+      this.messages.push(receivedMessage);
+      this.scrollChatToBottom();
+    });      
+    },
+
 
     clearInput() {
       this.newMessage.content = ''
