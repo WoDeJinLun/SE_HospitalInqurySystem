@@ -70,6 +70,8 @@
           </div>
         </div>
         <button class="save-btn" @click="saveInvoice">保存票据</button>
+        <button class="save-btn"><a :href="'http://192.168.43.97:9528'">前往药房</a ></button>
+      
       </div>
     </div>
     <div class="chat-window">
@@ -142,7 +144,7 @@ import io from 'socket.io-client';
 export default {
   created() {
       // 创建 Socket.io 客户端连接
-      const socket = io('http://127.0.0.1:3000');
+      const socket = io('http://192.168.43.89:3000');
 
 
       
@@ -222,12 +224,15 @@ export default {
         treatment: this.treatment,
       });
     },
-
+    GotoYaofang()
+    {
+      this.router.replace('http://192.168.43.97:9528');
+    },
     sendMessage() {
       if (this.newMessage.content) {
         const message = { sender: 'user', content: this.newMessage.content };
         console.log(message)
-        axios.post('http://127.0.0.1:3000/msg', JSON.stringify({sender:''+window.location.port,content:this.newMessage.content}),{
+        axios.post('http://192.168.43.89:3000/msg', JSON.stringify({sender:''+window.location.port,content:this.newMessage.content}),{
           headers: {'Content-Type' : 'application/json'}
         })
           .then(response => {
@@ -253,7 +258,7 @@ export default {
         const message = { sender: 'user', content: msg };
         this.scrollChatToBottom();
 
-        axios.post('http://127.0.0.1:3000/msg', JSON.stringify(message),{
+        axios.post('http://192.168.43.89:3000/msg', JSON.stringify(message),{
           headers: {'Content-Type' : 'application/json'}
         })
           .then(response => {

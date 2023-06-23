@@ -228,7 +228,7 @@ export default {
         this.clearInput()
         this.scrollChatToBottom()
         console.log(msg)
-        axios.get('http://localhost:5000/ai?message='+msg,{Headers:{'Content-Type':'application/json'}})
+        axios.get('http://192.168.43.89:5000/ai?message='+msg,{Headers:{'Content-Type':'application/json'}})
         .then(Response =>{
           console.log(Response)
           // this.messages.push({...Response.data})

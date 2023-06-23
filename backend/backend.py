@@ -5,8 +5,15 @@ from use import AiQuery
 app = Flask(__name__)
 cors = CORS(app,supports_credentials=True)
 # CORS(app, resources=r'/*', supports_credentials=True)
-mysql_interface = MysqlInterface()
+#mysql_interface = MysqlInterface()
 ai_interface = AiQuery()
+@app.route('/ai/',methods =['get'])
+def GetAiPrompt():
+    sentence = request.values.get('message')
+    
+    prompt = ai_interface.query(sentence)
+    return jsonify({"message":"{}".format(prompt)})
+'''
 @app.route('/patients', methods=['POST'])
 def create_patient():
     data = request.json
@@ -92,6 +99,6 @@ def create_drug_receipt():
 
     return jsonify({"message": "Drug receipt created successfully"})
 
-
+'''
 if __name__ == '__main__':
     app.run(host='0.0.0.0',port=5000,debug=True)

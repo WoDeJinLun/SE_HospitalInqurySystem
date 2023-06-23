@@ -10,7 +10,7 @@ const io = require('socket.io')(http, {
     }
   });
 app.use(cors({
-  origin: ['http://localhost:8080','http://localhost:8081'], // 允许的源地址
+  //origin: ['http://localhost:8080','http://localhost:8081','http://192.168.43.97:9528', 'http://192.168.43.109:8080', 'http://192.168.43.62:8080'], // 允许的源地址
   methods: ['GET', 'POST'], // 允许的请求方法
 }));
 
