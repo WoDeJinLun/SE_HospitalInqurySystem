@@ -147,10 +147,30 @@ export default {
       const socket = io('http://192.168.43.89:3000');
 
 
-      
+      socket.on('receiveBill', (message) =>{
+        console.log('msg'+message) 
+        if(message.sender!=window.location.port){
+          this.patientName=message.patientName;
+          this.drugName=message.drugName;
+          this.drugPrice=message.drugPrice;
+          this.drugQuantity=message.drugQuantity;
+          this.totalPrice=message.totalPrice;
+        }
+      });
+      socket.on('receiveLog', (message) =>{
+        console.log('msg'+message) 
+        if(message.sender!=window.location.port){
+          this.patientName=message.patientName;
+          this.gender=message.gender;
+          this.age=message.age;
+          this.diagnosis=message.diagnosis;
+          this.treatment=message.treatment;
+        }
+      });
       // 监听服务器发送的消息事件
       socket.on('receiveMessage', (message) => {
-        console.log(message)
+        console.log(message.sender)
+        console.log(window.location.port)
         if(message.sender!=window.location.port){
           message.sender = "agent";
           this.messages.push(message);
@@ -183,7 +203,7 @@ export default {
       drugQuantity: "",
       totalPrice: "",
       messages: [
-        { sender: 'agent', content: '您好' }
+        { sender: 'agent', content: '病人填写的基本情况已经发送给医生。交谈时请注意隐私安全，勿泄露其他不必要的个人信息。' }
       ],
       newMessage: {
         sender: 'user',
@@ -202,6 +222,13 @@ export default {
     saveInvoice() {
       this.$message.success("保存成功");
       // TODO: 保存到数据库或本地存储等
+      const invoice = {
+        patientName: this.patientName,
+        drugName: this.drugName,
+        drugPrice: this.drugPrice,
+        drugQuantity: this.drugQuantity,
+        totalPrice: this.totalPrice,
+      };
       console.log({
         patientName: this.patientName,
         drugName: this.drugName,
@@ -209,6 +236,18 @@ export default {
         drugQuantity: this.drugQuantity,
         totalPrice: this.totalPrice,
       });
+      axios.post('http://192.168.43.89:3000/bill', JSON.stringify(invoice),{
+          headers: {'Content-Type' : 'application/json'}
+        })
+          .then(response => {
+            // Handle the response from the server
+            const receivedMessage = response.data;
+            console.log("send msg");
+            console.log(receivedMessage);
+          })
+          .catch(error => {
+            console.error('Error sending message:', error);
+          });
     },
     goTo(path) {
       this.$router.replace(path)
@@ -216,6 +255,14 @@ export default {
     sendRecord() {
       this.$message.success("保存成功");
       // TODO: 发送病历信息
+      const log = {
+        patientName: this.patientName,
+        gender: this.gender,
+        age: this.age,
+        diagnosis: this.diagnosis,
+        treatment: this.treatment,
+      };
+
       console.log({
         patientName: this.patientName,
         gender: this.gender,
@@ -223,6 +270,18 @@ export default {
         diagnosis: this.diagnosis,
         treatment: this.treatment,
       });
+      axios.post('http://192.168.43.89:3000/log', JSON.stringify(log),{
+          headers: {'Content-Type' : 'application/json'}
+        })
+          .then(response => {
+            // Handle the response from the server
+            const receivedMessage = response.data;
+            console.log("send msg");
+            console.log(receivedMessage);
+          })
+          .catch(error => {
+            console.error('Error sending message:', error);
+          });
     },
     GotoYaofang()
     {
@@ -257,8 +316,7 @@ export default {
       if (msg) {
         const message = { sender: 'user', content: msg };
         this.scrollChatToBottom();
-
-        axios.post('http://192.168.43.89:3000/msg', JSON.stringify(message),{
+        axios.post('http://192.168.43.89:3000/msg', JSON.stringify({sender:''+window.location.port,content:msg}),{
           headers: {'Content-Type' : 'application/json'}
         })
           .then(response => {

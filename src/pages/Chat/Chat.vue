@@ -112,22 +112,6 @@
           </el-button>
         </div>
       </div>
-      <div class="quick-messages">
-          <el-button type="text" width=12 @click="sendQuickMessage('患者您好！')">患者您好！</el-button>
-          <el-button type="text" @click="sendQuickMessage('请问我有什么可以帮到您？')">请问我有什么可以帮到您？</el-button>
-        </div>
-        <div class="quick-messages">
-          <el-button type="text" @click="sendQuickMessage('请讲一下自己的病情')">请讲一下自己的病情</el-button>
-          <el-button type="text" @click="sendQuickMessage('这种症状出现多久了？')">这种症状出现多久了？</el-button>
-  
-       
-        </div>
-        <div class="quick-messages">
-          <el-button type="text" @click="sendQuickMessage('建议来医院检查')">建议来医院检查。</el-button>
-          <el-button type="text" @click="sendQuickMessage('祝您身体健康，再见')">祝您身体健康，再见</el-button>
-  
- 
-        </div>   
 
  
     </div>
@@ -142,15 +126,15 @@ import io from 'socket.io-client';
 export default {
   created() {
       // 创建 Socket.io 客户端连接
-      const socket = io('http://127.0.0.1:3000');
+      const socket = io('http://192.168.43.89:3000');
 
 
       
-      // 监听服务器发送的消息事件
-      socket.on('receiveMessage', (message) => {
-        this.messages.push(message);
-        this.scrollChatToBottom();
-      });
+      // 监听服务器发送的消息事件（AI端不需要）
+    //  socket.on('receiveMessage', (message) => {
+     //   this.messages.push(message);
+      //  this.scrollChatToBottom();
+     // });
     },
 
   name: 'ChatWindow',
@@ -175,7 +159,7 @@ export default {
       drugQuantity: "",
       totalPrice: "",
       messages: [
-        { sender: 'agent', content: '您好' }
+        { sender: 'agent', content: '欢迎使用AI问诊！\n 输入一段较完整的病情描述，AI小助手会返回您的描述所对应的三种最可能的疾病！' }
       ],
       newMessage: {
         sender: 'user',
@@ -250,7 +234,7 @@ export default {
         const message = { sender: 'user', content: msg };
         this.scrollChatToBottom();
 
-        axios.post('http://127.0.0.1:3000/msg', JSON.stringify(message),{
+        axios.post('http://192.168.43.89:3000/msg', JSON.stringify(message),{
           headers: {'Content-Type' : 'application/json'}
         })
           .then(response => {

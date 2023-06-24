@@ -22,6 +22,7 @@ io.on('connection', socket => {
   // 监听前端发送的消息事件
   socket.on('sendMessage', ({ sender, content }) => {
     // 将消息发送给其他用户
+    console.log('s');
     socket.broadcast.emit('receiveMessage', { sender, content });
   });
   socket.on('receiveMessage', ({ sender, content }) => {
@@ -29,6 +30,7 @@ io.on('connection', socket => {
     console.log('Received content:', sender, content);
     // 这里可以编写进一步处理接收消息的逻辑
   });
+ // socket.on('')
 });
 
 app.use(express.json()); // 添加 JSON 解析中间件
@@ -39,6 +41,23 @@ app.post('/msg', (req, res) => {
   io.emit('receiveMessage', { sender, content });
   console.log(sender);
   console.log(content);
+  res.sendStatus(200); // 返回成功状态码
+});
+
+app.post('/bill', (req, res) => {
+  //const { sender, content } = req.body;
+  // 群发消息给其他连接的用户
+  console.log(req.body);
+  console.log(req.body.drugPrice);
+  io.emit('receiveBill', req.body);
+  res.sendStatus(200); // 返回成功状态码
+});
+
+app.post('/log', (req, res) => {
+  //const { sender, content } = req.body;
+  // 群发消息给其他连接的用户
+  console.log(req.body);
+  io.emit('receiveLog', req.body);
   res.sendStatus(200); // 返回成功状态码
 });
 
